@@ -12,7 +12,7 @@ function socket({io}:{io:Server}) {
       console.log(io.engine.clientsCount);
       
       logger.info('Player ready', socket.id);
-      if (io.engine.clientsCount === 2) {
+      if (io.engine.clientsCount % 2 === 0) {
         console.log("it is 2")
         io.emit(EVENTS.SERVER.startGame,socket.id)
       }
@@ -20,6 +20,12 @@ function socket({io}:{io:Server}) {
     socket.on(EVENTS.CLIENT.paddleMove, ({xPosition}) => {
       console.log(xPosition)
      socket.broadcast.emit(EVENTS.CLIENT.paddleMove,xPosition) 
+    })
+    socket.on(EVENTS.CLIENT.ballMove, (ballData) => {
+      socket.broadcast.emit(EVENTS.CLIENT.ballMove,ballData)
+    })
+    socket.on(EVENTS.disconnect, (reason) => {
+      
     })
   })
 }

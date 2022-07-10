@@ -5,9 +5,11 @@ const socket = io('http://localhost:4000');
 
 const EVENTS = {
   connection: 'connection',
+  disconnect: 'disconnect',
   CLIENT: {
     ready: 'ready',
     paddleMove: 'paddleMove',
+    ballMove: 'ballMove',
   },
   SERVER: {
     startGame: 'startGame',
@@ -101,6 +103,11 @@ function ballReset() {
   ballX = width / 2;
   ballY = height / 2;
   speedY = 3;
+  socket.emit(EVENTS.CLIENT.ballMove, {
+    ballX,
+    ballY,
+    score,
+  });
 }
 
 // Adjust Ball Movement
@@ -111,6 +118,10 @@ function ballMove() {
   if (playerMoved) {
     ballX += speedX;
   }
+  socket.emit(EVENTS.CLIENT.ballMove, {
+    ballX,
+    ballY,
+  });
 }
 
 // Determine What Ball Bounces Off, Score Points, Reset Ball
@@ -166,9 +177,11 @@ function ballBoundaries() {
 
 // Called Every Frame
 function animate() {
-  ballMove();
+  if (isReferee) {
+    ballMove();
+    ballBoundaries();
+  }
   renderCanvas();
-  ballBoundaries();
   window.requestAnimationFrame(animate);
 }
 
@@ -210,4 +223,7 @@ socket.on(EVENTS.SERVER.startGame, (refereeId) => {
 socket.on(EVENTS.CLIENT.paddleMove, (paddlePosition) => {
   const opponentPaddleIndex = 1 - paddleIndex;
   paddleX[opponentPaddleIndex] = paddlePosition;
+});
+socket.on(EVENTS.CLIENT.ballMove, (ballData) => {
+  ({ ballX, ballY, score } = ballData);
 });
