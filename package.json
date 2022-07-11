@@ -1,0 +1,23 @@
+{
+  "name": "ping-pong-socket-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "npm install --prefix server",
+    "install": "npm run install-server",
+    "deploy": "npm start --prefix server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Janku13/ping-pong-socket-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Janku13/ping-pong-socket-node/issues"
+  },
+  "homepage": "https://github.com/Janku13/ping-pong-socket-node#readme"
+}
